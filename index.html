@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product list</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="CSS/all.min.css" />
+    <link rel="stylesheet" href="CSS/main.css" />
+  </head>
+  <body class="d-flex-center">
+    <div class="overlay hidden"></div>
+    <template class="dessert-prototype">
+      <article class="dessert">
+        <img class="dessert-image" src="" alt="" />
+        <div class="control-dessert">
+          <button type="button" class="add-btn d-flex-center">
+            <img src="images/icon-add-to-cart.svg" alt="" />
+            <p>Add to Cart</p>
+          </button>
+          <div class="count-btn d-flex-space-b hidden">
+            <button type="submit" class="minus d-flex-center">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <span class="quantity">1</span>
+            <button type="submit" class="plus d-flex-center">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="info">
+          <h4 class="category"></h4>
+          <p class="name"></p>
+          <span class="price"></span>
+        </div>
+      </article>
+    </template>
+    <template class="dessert-cart-prototype">
+      <article class="dessert-cart d-flex-space-b">
+        <div class="dessert-info">
+          <h3 class="dessert-name"></h3>
+          <span class="dessert-quantity">1x</span>
+          <span class="dessert-price"></span>
+          <span class="dessert-total-price"></span>
+        </div>
+        <button type="submit" class="remove-btn d-flex-center"><i class="fa-solid fa-xmark"></i></button>
+      </article>
+    </template>
+    <main>
+      <section class="menu">
+        <h1>Desserts</h1>
+        <div class="desserts-list"></div>
+      </section>
+      <section class="your-cart">
+        <h2 class="total-items">Your Cart (<span>0</span>)</h2>
+        <div class="cart-info hidden">
+          <div class="order-info">
+            <div class="all-desserts-cart"></div>
+            <div class="order-total d-flex-space-b">
+              <p>Order Total</p>
+              <span class="total-cost"></span>
+            </div>
+          </div>
+          <div class="delivery-msg d-flex-center">
+            <img src="images/icon-carbon-neutral.svg" alt="" />
+            <p>This is a <span> carbon-neutral</span> delivery</p>
+          </div>
+          <button type="submit" class="confirm red-btn" type="button">Confirm Order</button>
+        </div>
+        <div class="empty-cart-info">
+          <img class="empty-cart-img" src="images/illustration-empty-cart.svg" alt="" />
+          <p class="empty-cart-msg">Your added items will appear here</p>
+        </div>
+      </section>
+      <div class="order-confirmed hidden">
+        <img src="images/icon-order-confirmed.svg" alt="" />
+        <h2>Order Confirmed</h2>
+        <p>We hope you enjoy your food!</p>
+        <button type="submit" class="new-order-btn red-btn" type="button">Start New Order</button>
+      </div>
+    </main>
+    <script src="master.js"></script>
+  </body>
+</html>
