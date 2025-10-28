@@ -205,5 +205,3 @@ newOrderBtn.addEventListener("click", () => {
   totalCost.textContent = "0";
   showEmptyCart();
 });
-
-// check the responsive on all needed
