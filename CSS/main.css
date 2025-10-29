@@ -404,11 +404,20 @@ main {
   padding: 3.5rem;
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 50%;
+  transform: translate(-50%, 50%);
   z-index: 100;
   background-color: white;
   border-radius: var(--b-rad-9);
+}
+
+@media (max-width: 500px) {
+  .order-confirmed {
+    bottom: 0;
+    transform: translate(-50%, 0);
+    padding: 2.5rem 2rem 3.5rem;
+    width: 100%;
+  }
 }
 
 .order-confirmed > img {
@@ -432,10 +441,34 @@ main {
   border-radius: var(--b-rad-9);
 }
 
-.order-confirmed .order-info .dessert-cart img {
+@media (max-width: 500px) {
+  .order-confirmed .order-info {
+    padding: 2rem;
+  }
+}
+
+.order-info .dessert-cart img {
   margin-right: 2rem;
   width: 5.5rem;
   border-radius: var(--b-rad-9);
+}
+
+@media (max-width: 500px) {
+  .order-info .dessert-cart img {
+    margin-right: 1.5rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .order-info .dessert-cart .dessert-name {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .order-info .order-total .total-cost {
+    font-size: 2.6rem;
+  }
 }
 
 .order-confirmed .order-info .dessert-total-price {

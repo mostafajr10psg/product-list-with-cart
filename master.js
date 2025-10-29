@@ -81,8 +81,8 @@ async function getData() {
 getData();
 
 function updateTotalCost(dessertPrice) {
-  // do a better version
-  totalCost.textContent = priceFormatting(removeDollarSign(totalCost.textContent) + dessertPrice);
+  let pureTotalCost = removeDollarSign(totalCost.textContent);
+  totalCost.textContent = priceFormatting(pureTotalCost + dessertPrice);
 }
 
 function handleAddBtn(btn) {
@@ -107,9 +107,7 @@ function handlePlusAndMinus(btn, status) {
   let dessertQuantity = dessert.querySelector(".count-btn .quantity");
 
   function updateDessertTotalPrice() {
-    dessertCart.querySelector(".dessert-total-price").textContent = priceFormatting(
-      dessertQuantity.textContent * dessertCartPrice
-    );
+    setDataToEle(dessertCart, ".dessert-total-price", priceFormatting(dessertQuantity.textContent * dessertCartPrice));
   }
 
   function updateDessertCartQuantity() {
@@ -171,25 +169,19 @@ allDessertsCart.addEventListener("click", (e) => {
 // order-confirmed
 confirmBtn.addEventListener("click", () => {
   removeClassFromEles("hidden", overlay, orderconfirmed);
-  let cloneOrderInfo = orderInfo.cloneNode(true);
-  for (let removeBtn of cloneOrderInfo.querySelectorAll(".dessert-cart .remove-btn")) removeBtn.remove();
-  // set the thumbnail imgs
-  cloneOrderInfo.querySelectorAll(".dessert-cart").forEach((el) => {
-    let img = document.createElement("img");
-    img.src = getEleByDessertId(".dessert", el.dataset.dessertId)
-      .querySelector(".dessert-image")
-      .src.replace("desktop", "thumbnail");
-    el.prepend(img);
+  const cloneOrderInfo = orderInfo.cloneNode(true);
+
+  cloneOrderInfo.querySelectorAll(".dessert-cart").forEach((dc) => {
+    dc.querySelector(".remove-btn").remove();
+    let thumbnailImg = document.createElement("img");
+    let dessertImg = getEleByDessertId(".dessert", dc.dataset.dessertId).querySelector(".dessert-image");
+    thumbnailImg.src = dessertImg.src.replace("desktop", "thumbnail");
+    dc.prepend(thumbnailImg);
+    dc.append(dc.querySelector(".dessert-total-price"));
   });
-
-  let totalPrice = cloneOrderInfo.querySelectorAll(".order-info .dessert-total-price");
-  for (let i = 0; i < totalPrice.length; i++)
-    cloneOrderInfo.querySelectorAll(".order-info .dessert-info")[i].after(totalPrice[i]);
-
-  document.querySelector(".order-confirmed .new-order-btn").before(cloneOrderInfo);
+  newOrderBtn.before(cloneOrderInfo);
 });
 
-// new-order
 newOrderBtn.addEventListener("click", () => {
   orderconfirmed.querySelector(".order-info").remove();
   addClassToEles("hidden", orderconfirmed, overlay);
