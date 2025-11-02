@@ -21,6 +21,13 @@ html {
   --b-rad-9: 9px;
 }
 
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .hidden {
   display: none !important;
 }
@@ -174,6 +181,11 @@ main {
   cursor: pointer;
 }
 
+.control-dessert .add-btn:active {
+  transform: scale(0.98);
+  /* opacity: 0.8; */
+}
+
 .control-dessert .add-btn:hover {
   border-color: var(--red);
   color: var(--red);
@@ -200,6 +212,11 @@ main {
 .control-dessert .count-btn :where(.minus, .plus):hover {
   background-color: var(--rose-50);
   color: var(--red);
+}
+
+.control-dessert .count-btn :where(.minus, .plus):active {
+  transform: scale(0.98);
+  opacity: 0.8;
 }
 
 .control-dessert .count-btn :where(.minus, .plus) i {
