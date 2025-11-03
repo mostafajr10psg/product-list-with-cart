@@ -266,6 +266,8 @@ main {
   width: 100%;
   max-width: 40rem;
   height: fit-content;
+  max-height: 70rem;
+  overflow-y: auto;
   padding: 2.5rem 2.5rem 4rem;
   background-color: white;
   border-radius: var(--b-rad-9);
@@ -286,6 +288,7 @@ main {
 @media (max-width: 480px) {
   .your-cart {
     padding: 2rem 2.5rem 3rem;
+    max-height: 50rem;
   }
 }
 
@@ -416,11 +419,13 @@ main {
   font-size: 1.5rem;
 }
 
-.order-confirmed {
+.confirmation-modal {
   width: calc(100% - 3rem);
-  max-width: 57rem;
+  max-width: 60rem;
+  max-height: 70rem;
+  overflow-y: auto;
   padding: 3.5rem;
-  position: absolute;
+  position: fixed;
   left: 50%;
   bottom: 50%;
   transform: translate(-50%, 50%);
@@ -430,7 +435,7 @@ main {
 }
 
 @media (max-width: 480px) {
-  .order-confirmed {
+  .confirmation-modal {
     bottom: 0;
     transform: translate(-50%, 0);
     padding: 2.5rem 2rem 3.5rem;
@@ -438,21 +443,21 @@ main {
   }
 }
 
-.order-confirmed > img {
+.confirmation-modal > img {
   display: block;
 }
 
-.order-confirmed > h2 {
+.confirmation-modal > h2 {
   font-size: 3.5rem;
   color: var(--rose-900);
   margin: 1rem 0 0.6rem;
 }
 
-.order-confirmed > p {
+.confirmation-modal > p {
   color: var(--rose-500);
 }
 
-.order-confirmed .order-info {
+.confirmation-modal .order-info {
   margin: 3rem 0;
   padding: 2.5rem;
   background-color: var(--rose-50);
@@ -460,7 +465,7 @@ main {
 }
 
 @media (max-width: 480px) {
-  .order-confirmed .order-info {
+  .confirmation-modal .order-info {
     padding: 2rem;
   }
 }
@@ -483,12 +488,12 @@ main {
   }
 }
 
-.order-confirmed .order-info .dessert-total-price {
+.confirmation-modal .order-info .dessert-total-price {
   flex: 1;
   text-align: end;
   color: var(--rose-900);
 }
 
-.order-confirmed button {
+.confirmation-modal button {
   padding: 1.4rem 0;
 }

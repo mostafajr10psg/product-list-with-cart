@@ -6,8 +6,8 @@ const totalItems = document.querySelector(".your-cart .total-items span");
 const allDessertsCart = document.querySelector(".your-cart .all-desserts-cart");
 const totalCost = document.querySelector(".your-cart .order-total .total-cost");
 const confirmBtn = document.querySelector(".your-cart button.confirm");
-const orderconfirmed = document.querySelector(".order-confirmed");
-const newOrderBtn = document.querySelector(".order-confirmed .new-order-btn");
+const confirmationModal = document.querySelector(".confirmation-modal");
+const newOrderBtn = document.querySelector(".confirmation-modal .new-order-btn");
 const overlay = document.querySelector(".overlay");
 
 function addClassToEles(cls, ...eles) {
@@ -172,22 +172,23 @@ allDessertsCart.addEventListener("click", (e) => {
 
 function lockScroll() {
   document.body.style.position = "fixed";
-  document.body.style.bottom = "0";
+  document.body.style.top = "0";
+  document.body.style.left = "0";
+  document.body.style.right = "0";
   document.body.style.width = "100%";
 }
 
 function unlockScroll() {
   document.body.style.position = "";
-  document.body.style.bottom = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
   document.body.style.width = "";
 }
 
 confirmBtn.addEventListener("click", () => {
-  if (matchMedia("(max-width: 480px)").matches) {
-    lockScroll();
-  }
-
-  removeClassFromEles("hidden", overlay, orderconfirmed);
+  lockScroll();
+  removeClassFromEles("hidden", overlay, confirmationModal);
   const cloneOrderInfo = orderInfo.cloneNode(true);
 
   cloneOrderInfo.querySelectorAll(".dessert-cart").forEach((dc) => {
@@ -203,8 +204,8 @@ confirmBtn.addEventListener("click", () => {
 
 newOrderBtn.addEventListener("click", () => {
   unlockScroll();
-  orderconfirmed.querySelector(".order-info").remove();
-  addClassToEles("hidden", orderconfirmed, overlay);
+  confirmationModal.querySelector(".order-info").remove();
+  addClassToEles("hidden", confirmationModal, overlay);
 
   const addBtnsHidden = document.querySelectorAll(".add-btn.hidden");
   addBtnsHidden.forEach((addBtn) => {
