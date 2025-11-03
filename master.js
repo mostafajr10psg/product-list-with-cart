@@ -60,18 +60,20 @@ function setDataToEle(parent, ele, data) {
 const dessertsNameMap = new Map();
 const dessertsPriceMap = new Map();
 
-const mobileMedia = matchMedia("(max-width: 480px)");
-const tabletMedia = matchMedia("(min-width: 481px) and (max-width: 1024px)");
-const desktopMedia = matchMedia("(min-width: 1025px)");
-
 async function getData() {
   const fetchdata = await fetch("data.json");
   const dessertsData = await fetchdata.json();
 
   for (let i = 0; i < dessertsData.length; i++) {
-    let dessert = cloneTemplate("template.dessert-prototype", ".dessert");
+    const dessert = cloneTemplate("template.dessert-prototype", ".dessert");
+    const sources = dessert.querySelectorAll("picture source");
     dessert.dataset.dessertId = `${i + 1}`;
+
     dessert.querySelector(".dessert-image").src = dessertsData[i].image.desktop;
+    sources[0].srcset = dessertsData[i].image.mobile;
+    sources[1].srcset = dessertsData[i].image.tablet;
+    sources[2].srcset = dessertsData[i].image.desktop;
+
     setDataToEle(dessert, ".info .category", dessertsData[i].category);
     setDataToEle(dessert, ".info .name", dessertsData[i].name);
     setDataToEle(dessert, ".info .price", priceFormatting(dessertsData[i].price));
@@ -80,22 +82,8 @@ async function getData() {
     dessertsPriceMap.set(i + 1, priceFormatting(dessertsData[i].price));
     dessertsList.append(dessert);
   }
-
-  function changeDessertImgSrc(newSrc) {
-    for (let img of document.querySelectorAll(".dessert-image")) img.src = img.src.replace(/\w+(?=\.jpg)/, newSrc);
-  }
-
-  function updateDessertImg() {
-    if (mobileMedia.matches) changeDessertImgSrc("mobile");
-    else if (tabletMedia.matches) changeDessertImgSrc("tablet");
-    else if (desktopMedia.matches) changeDessertImgSrc("desktop");
-  }
-  updateDessertImg();
-
-  [mobileMedia, tabletMedia, desktopMedia].forEach((media) => {
-    media.addEventListener("change", updateDessertImg);
-  });
 }
+
 getData();
 
 function updateTotalCost(dessertPrice) {
@@ -158,7 +146,7 @@ function handlePlusAndMinus(btn, status) {
   else if (status === "minus") return handleMinus();
 }
 
-dessertsList.addEventListener("pointerdown", (e) => {
+dessertsList.addEventListener("pointerup", (e) => {
   let btn = e.target;
 
   if (btn.closest(".add-btn")) handleAddBtn(btn);
@@ -182,9 +170,21 @@ allDessertsCart.addEventListener("click", (e) => {
   document.querySelectorAll(".remove-btn").length === 0 ? showEmptyCart() : "";
 });
 
+function lockScroll() {
+  document.body.style.position = "fixed";
+  document.body.style.bottom = "0";
+  document.body.style.width = "100%";
+}
+
+function unlockScroll() {
+  document.body.style.position = "";
+  document.body.style.bottom = "";
+  document.body.style.width = "";
+}
+
 confirmBtn.addEventListener("click", () => {
-  if (mobileMedia.matches) {
-    document.body.style.overflow = "hidden";
+  if (matchMedia("(max-width: 480px)").matches) {
+    lockScroll();
   }
 
   removeClassFromEles("hidden", overlay, orderconfirmed);
@@ -202,7 +202,7 @@ confirmBtn.addEventListener("click", () => {
 });
 
 newOrderBtn.addEventListener("click", () => {
-  document.body.style.removeProperty("overflow");
+  unlockScroll();
   orderconfirmed.querySelector(".order-info").remove();
   addClassToEles("hidden", orderconfirmed, overlay);
 

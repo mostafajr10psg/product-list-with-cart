@@ -17,7 +17,12 @@
     <div class="overlay hidden"></div>
     <template class="dessert-prototype">
       <article class="dessert">
-        <img class="dessert-image" src="" alt="" />
+        <picture>
+          <source media="(max-width: 480px)" />
+          <source media="(max-width: 1024px)" />
+          <source media="(min-width: 1025px)" />
+          <img class="dessert-image" src="" alt="" />
+        </picture>
         <div class="control-dessert">
           <button type="button" class="add-btn d-flex-center">
             <img src="images/icon-add-to-cart.svg" alt="" />

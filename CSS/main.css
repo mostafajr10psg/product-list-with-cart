@@ -95,9 +95,9 @@ main {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   main {
-    margin: 3rem 2rem;
+    margin: 4rem 2rem;
   }
 }
 
@@ -131,7 +131,7 @@ main {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .menu .desserts-list {
     grid-template-columns: repeat(1, minmax(20rem, 30rem));
     justify-content: center;
@@ -156,16 +156,6 @@ main {
   z-index: 10;
 }
 
-.dessert .info {
-  margin-top: -0.7rem;
-}
-
-@media (max-width: 500px) {
-  .dessert .info {
-    margin-top: -1rem;
-  }
-}
-
 .control-dessert .add-btn {
   font-family: "Red Hat Text", sans-serif;
   width: 100%;
@@ -183,12 +173,13 @@ main {
 
 .control-dessert .add-btn:active {
   transform: scale(0.98);
-  /* opacity: 0.8; */
 }
 
-.control-dessert .add-btn:hover {
-  border-color: var(--red);
-  color: var(--red);
+@media (min-width: 767px) {
+  .control-dessert .add-btn:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
 }
 
 .control-dessert .count-btn {
@@ -233,6 +224,16 @@ main {
   user-select: none;
 }
 
+.dessert .info {
+  margin-top: -0.7rem;
+}
+
+@media (max-width: 480px) {
+  .dessert .info {
+    margin-top: -1rem;
+  }
+}
+
 .dessert .info .category {
   font-size: 1.4rem;
   font-weight: normal;
@@ -245,7 +246,7 @@ main {
   font-weight: 600;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .dessert .info .name {
     font-size: 1.5rem;
   }
@@ -255,7 +256,7 @@ main {
   color: var(--red);
   font-weight: 600;
 }
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .dessert .info .price {
     font-size: 1.5rem;
   }
@@ -282,7 +283,7 @@ main {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .your-cart {
     padding: 2rem 2.5rem 3rem;
   }
@@ -292,7 +293,7 @@ main {
   color: var(--red);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .your-cart .total-items {
     font-size: 2rem;
   }
@@ -315,7 +316,7 @@ main {
   margin-bottom: 1rem;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .dessert-cart .dessert-name {
     font-size: 1.5rem;
     margin-bottom: 0.7rem;
@@ -339,7 +340,7 @@ main {
   font-weight: 600;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .dessert-cart span {
     font-size: 1.4rem;
   }
@@ -373,11 +374,11 @@ main {
   color: var(--rose-900);
 }
 
-/* @media (max-width: 500px) {
+@media (max-width: 480px) {
   .order-total .total-cost {
     font-size: 2.7rem;
   }
-} */
+}
 
 .cart-info .delivery-msg {
   gap: 0.7rem;
@@ -391,7 +392,7 @@ main {
   color: var(--rose-900);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .cart-info .delivery-msg p {
     font-size: 1.3rem;
   }
@@ -428,7 +429,7 @@ main {
   border-radius: var(--b-rad-9);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .order-confirmed {
     bottom: 0;
     transform: translate(-50%, 0);
@@ -458,7 +459,7 @@ main {
   border-radius: var(--b-rad-9);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .order-confirmed .order-info {
     padding: 2rem;
   }
@@ -470,21 +471,15 @@ main {
   border-radius: var(--b-rad-9);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .order-info .dessert-cart img {
     margin-right: 1.5rem;
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .order-info .dessert-cart .dessert-name {
     font-size: 1.4rem;
-  }
-}
-
-@media (max-width: 500px) {
-  .order-info .order-total .total-cost {
-    font-size: 2.6rem;
   }
 }
 
