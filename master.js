@@ -154,7 +154,7 @@ dessertsList.addEventListener("pointerup", (e) => {
   else if (btn.closest(".minus")) handlePlusAndMinus(btn, "minus");
 });
 
-allDessertsCart.addEventListener("click", (e) => {
+allDessertsCart.addEventListener("pointerup", (e) => {
   btn = e.target;
   if (!btn.closest(".remove-btn")) return;
   let dessertCart = btn.closest(".dessert-cart");
@@ -186,7 +186,7 @@ function unlockScroll() {
   document.body.style.width = "";
 }
 
-confirmBtn.addEventListener("click", () => {
+confirmBtn.addEventListener("pointerup", () => {
   lockScroll();
   removeClassFromEles("hidden", overlay, confirmationModal);
   const cloneOrderInfo = orderInfo.cloneNode(true);
@@ -196,16 +196,11 @@ confirmBtn.addEventListener("click", () => {
     let thumbnailImg = document.createElement("img");
     let dessertImg = getEleByDessertId(".dessert", dc.dataset.dessertId).querySelector(".dessert-image");
     thumbnailImg.src = dessertImg.src.replace("desktop", "thumbnail");
+    console.log(getEleByDessertId(".dessert", dc.dataset.dessertId));
     dc.prepend(thumbnailImg);
     dc.append(dc.querySelector(".dessert-total-price"));
   });
   newOrderBtn.before(cloneOrderInfo);
-});
-
-newOrderBtn.addEventListener("click", () => {
-  unlockScroll();
-  confirmationModal.querySelector(".order-info").remove();
-  addClassToEles("hidden", confirmationModal, overlay);
 
   const addBtnsHidden = document.querySelectorAll(".add-btn.hidden");
   addBtnsHidden.forEach((addBtn) => {
@@ -217,4 +212,10 @@ newOrderBtn.addEventListener("click", () => {
   allDessertsCart.innerHTML = "";
   totalCost.textContent = "0";
   showEmptyCart();
+});
+
+newOrderBtn.addEventListener("pointerup", () => {
+  unlockScroll();
+  confirmationModal.querySelector(".order-info").remove();
+  addClassToEles("hidden", confirmationModal, overlay);
 });
