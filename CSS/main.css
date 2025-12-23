@@ -87,7 +87,7 @@ button {
 body {
   font-family: "Red Hat Text", sans-serif;
   font-size: 1.6rem;
-  background-color: var(--rose-100);
+  background-color: hsl(20deg 29.92% 95.35%);
   position: relative;
 }
 
