@@ -47,13 +47,13 @@
     </template>
     <template class="dessert-cart-prototype">
       <article class="dessert-cart d-flex-space-b">
-        <div class="dessert-info">
-          <h3 class="dessert-name"></h3>
-          <span class="dessert-quantity">1x</span>
-          <span class="dessert-price"></span>
-          <span class="dessert-total-price"></span>
+        <div class="info">
+          <h3 class="name"></h3>
+          <span class="quantity">1x</span>
+          <span class="price"></span>
+          <span class="total-price"></span>
         </div>
-        <button type="submit" class="remove-btn d-flex-center"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="remove-btn d-flex-center"><i class="fa-solid fa-xmark"></i></button>
       </article>
     </template>
     <main>
@@ -75,9 +75,9 @@
             <img src="images/icon-carbon-neutral.svg" alt="" />
             <p>This is a <span> carbon-neutral</span> delivery</p>
           </div>
-          <button type="submit" class="confirm red-btn" type="button">Confirm Order</button>
+          <button type="button" class="confirm red-btn">Confirm Order</button>
         </div>
-        <div class="empty-cart-info">
+        <div class="empty-cart">
           <img class="empty-cart-img" src="images/illustration-empty-cart.svg" alt="" />
           <p class="empty-cart-msg">Your added items will appear here</p>
         </div>
@@ -86,7 +86,7 @@
         <img src="images/icon-order-confirmed.svg" alt="" />
         <h2>Order Confirmed</h2>
         <p>We hope you enjoy your food!</p>
-        <button type="submit" class="new-order-btn red-btn" type="button">Start New Order</button>
+        <button type="button" class="new-order-btn red-btn" type="button">Start New Order</button>
       </div>
     </main>
     <script src="master.js"></script>

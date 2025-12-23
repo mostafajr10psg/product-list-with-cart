@@ -1,13 +1,10 @@
-const dessertsList = document.querySelector(".desserts-list");
-const emptyCart = document.querySelector(".your-cart .empty-cart-info");
-const cartInfo = document.querySelector(".your-cart .cart-info");
-const orderInfo = document.querySelector(".your-cart .order-info");
-const totalItems = document.querySelector(".your-cart .total-items span");
-const allDessertsCart = document.querySelector(".your-cart .all-desserts-cart");
-const totalCost = document.querySelector(".your-cart .order-total .total-cost");
-const confirmBtn = document.querySelector(".your-cart button.confirm");
+const emptyCartEle = document.querySelector(".your-cart .empty-cart");
+const cartInfoEle = document.querySelector(".your-cart .cart-info");
+const totalItemsEle = document.querySelector(".your-cart .total-items span");
+const dessertsCartEle = document.querySelector(".your-cart .all-desserts-cart");
+const totalCostEle = document.querySelector(".your-cart .order-total .total-cost");
 const confirmationModal = document.querySelector(".confirmation-modal");
-const newOrderBtn = document.querySelector(".confirmation-modal .new-order-btn");
+const newOrderBtnEle = document.querySelector(".confirmation-modal .new-order-btn");
 const overlay = document.querySelector(".overlay");
 
 function addClassToEles(cls, ...eles) {
@@ -23,22 +20,22 @@ function getEleByDessertId(ele, dessertId) {
 }
 
 function showEmptyCart() {
-  cartInfo.classList.add("hidden");
-  emptyCart.classList.remove("hidden");
+  cartInfoEle.classList.add("hidden");
+  emptyCartEle.classList.remove("hidden");
 }
 
 function showAddBtn(dessertId) {
-  let dessert = getEleByDessertId(".dessert", dessertId);
+  const dessert = getEleByDessertId(".dessert", dessertId);
   dessert.querySelector(".dessert-image").classList.remove("b-color-dessert");
   dessert.querySelector(".add-btn").classList.remove("hidden");
   dessert.querySelector(".count-btn").classList.add("hidden");
 }
 
-function showCountBtn(dessertId) {
-  let dessert = getEleByDessertId(".dessert", dessertId);
+function hideAddBtn(dessertId) {
+  const dessert = getEleByDessertId(".dessert", dessertId);
   dessert.querySelector(".dessert-image").classList.add("b-color-dessert");
-  addClassToEles("hidden", dessert.querySelector(".add-btn"), emptyCart);
-  removeClassFromEles("hidden", dessert.querySelector(".count-btn"), cartInfo);
+  addClassToEles("hidden", dessert.querySelector(".add-btn"), emptyCartEle);
+  removeClassFromEles("hidden", dessert.querySelector(".count-btn"), cartInfoEle);
 }
 
 function removeDollarSign(ele) {
@@ -57,95 +54,73 @@ function setDataToEle(parent, ele, data) {
   return (parent.querySelector(ele).textContent = data);
 }
 
+function updateTotalCost(dessertPrice, operator) {
+  if (typeof dessertPrice === "string") dessertPrice = removeDollarSign(dessertPrice);
+  const pureTotalCost = removeDollarSign(totalCostEle.textContent);
+  operator === "+"
+    ? (totalCostEle.textContent = priceFormatting(pureTotalCost + dessertPrice))
+    : (totalCostEle.textContent = priceFormatting(pureTotalCost - dessertPrice));
+}
+
 const dessertsNameMap = new Map();
 const dessertsPriceMap = new Map();
 
-async function getData() {
-  const fetchdata = await fetch("data.json");
-  const dessertsData = await fetchdata.json();
-
-  for (let i = 0; i < dessertsData.length; i++) {
-    const dessert = cloneTemplate("template.dessert-prototype", ".dessert");
-    const sources = dessert.querySelectorAll("picture source");
-    dessert.dataset.dessertId = `${i + 1}`;
-
-    dessert.querySelector(".dessert-image").src = dessertsData[i].image.desktop;
-    sources[0].srcset = dessertsData[i].image.mobile;
-    sources[1].srcset = dessertsData[i].image.tablet;
-    sources[2].srcset = dessertsData[i].image.desktop;
-
-    setDataToEle(dessert, ".info .category", dessertsData[i].category);
-    setDataToEle(dessert, ".info .name", dessertsData[i].name);
-    setDataToEle(dessert, ".info .price", priceFormatting(dessertsData[i].price));
-
-    dessertsNameMap.set(i + 1, dessertsData[i].name);
-    dessertsPriceMap.set(i + 1, priceFormatting(dessertsData[i].price));
-    dessertsList.append(dessert);
-  }
-}
-
-getData();
-
-function updateTotalCost(dessertPrice) {
-  let pureTotalCost = removeDollarSign(totalCost.textContent);
-  totalCost.textContent = priceFormatting(pureTotalCost + dessertPrice);
-}
-
 function handleAddBtn(btn) {
-  let dessertId = btn.closest(".dessert").dataset.dessertId;
-  let createDessertCart = cloneTemplate("template.dessert-cart-prototype", ".dessert-cart");
-  createDessertCart.dataset.dessertId = dessertId;
-  showCountBtn(dessertId);
-  totalItems.textContent++;
+  const dessertId = btn.closest(".dessert").dataset.dessertId;
+  const dessertCartEle = cloneTemplate("template.dessert-cart-prototype", ".dessert-cart");
+  dessertCartEle.dataset.dessertId = dessertId;
+  hideAddBtn(dessertId);
+  totalItemsEle.textContent++;
 
-  setDataToEle(createDessertCart, ".dessert-name", dessertsNameMap.get(+dessertId));
-  let dessertPrice = setDataToEle(createDessertCart, ".dessert-price", dessertsPriceMap.get(+dessertId));
-  setDataToEle(createDessertCart, ".dessert-total-price", dessertPrice);
-  updateTotalCost(removeDollarSign(dessertPrice));
-  allDessertsCart.append(createDessertCart);
+  const dessertPrice = setDataToEle(dessertCartEle, ".price", dessertsPriceMap.get(+dessertId));
+  setDataToEle(dessertCartEle, ".total-price", dessertPrice);
+  setDataToEle(dessertCartEle, ".name", dessertsNameMap.get(+dessertId));
+  updateTotalCost(dessertPrice, "+");
+  dessertsCartEle.append(dessertCartEle);
 }
 
 function handlePlusAndMinus(btn, status) {
-  let dessert = btn.closest(".dessert");
-  let dessertId = dessert.dataset.dessertId;
-  let dessertCart = getEleByDessertId(".dessert-cart", dessertId);
-  let dessertCartPrice = removeDollarSign(dessertCart.querySelector(".dessert-price").textContent);
-  let dessertQuantity = dessert.querySelector(".count-btn .quantity");
+  const dessertEle = btn.closest(".dessert");
+  const dessertEleId = dessertEle.dataset.dessertId;
+  const dessertCartEle = getEleByDessertId(".dessert-cart", dessertEleId);
+  const dessertCartPrice = removeDollarSign(dessertCartEle.querySelector(".price").textContent);
+  const dessertQuantityEle = dessertEle.querySelector(".count-btn .quantity");
 
   function updateDessertTotalPrice() {
-    setDataToEle(dessertCart, ".dessert-total-price", priceFormatting(dessertQuantity.textContent * dessertCartPrice));
+    setDataToEle(dessertCartEle, ".total-price", priceFormatting(dessertQuantityEle.textContent * dessertCartPrice));
   }
 
   function updateDessertCartQuantity() {
-    setDataToEle(dessertCart, ".dessert-quantity", `${dessertQuantity.textContent}x`);
+    setDataToEle(dessertCartEle, ".quantity", `${dessertQuantityEle.textContent}x`);
   }
 
   function handlePlus() {
-    dessertQuantity.textContent++;
-    totalItems.textContent++;
+    dessertQuantityEle.textContent++;
+    totalItemsEle.textContent++;
     updateDessertCartQuantity();
     updateDessertTotalPrice();
-    updateTotalCost(dessertCartPrice);
+    updateTotalCost(dessertCartPrice, "+");
   }
 
   function handleMinus() {
-    totalItems.textContent--;
-    if (dessertQuantity.textContent === "1") {
-      showAddBtn(dessertId);
-      dessertCart.remove();
+    totalItemsEle.textContent--;
+    if (dessertQuantityEle.textContent === "1") {
+      showAddBtn(dessertEleId);
+      dessertCartEle.remove();
       document.getElementsByClassName("dessert-cart").length === 0 ? showEmptyCart() : "";
     } else {
-      dessertQuantity.textContent--;
+      dessertQuantityEle.textContent--;
       updateDessertCartQuantity();
       updateDessertTotalPrice();
     }
-    updateTotalCost(-dessertCartPrice);
+    updateTotalCost(dessertCartPrice, "-");
   }
 
   if (status === "plus") return handlePlus();
   else if (status === "minus") return handleMinus();
 }
 
+const dessertsList = document.querySelector(".desserts-list");
 dessertsList.addEventListener("pointerup", (e) => {
   let btn = e.target;
 
@@ -154,68 +129,91 @@ dessertsList.addEventListener("pointerup", (e) => {
   else if (btn.closest(".minus")) handlePlusAndMinus(btn, "minus");
 });
 
-allDessertsCart.addEventListener("pointerup", (e) => {
-  btn = e.target;
-  if (!btn.closest(".remove-btn")) return;
-  let dessertCart = btn.closest(".dessert-cart");
-  let dessertTotalPrice = dessertCart.querySelector(".dessert-total-price").textContent;
-  let dessert = getEleByDessertId(".dessert", dessertCart.dataset.dessertId);
-  let dessertQuantity = dessert.querySelector(".count-btn .quantity");
+async function setDataToDesserts() {
+  const fetchdata = await fetch("data.json");
+  const dessertsData = await fetchdata.json();
 
-  totalItems.textContent = +totalItems.textContent - +dessertQuantity.textContent;
+  for (let i = 0; i < dessertsData.length; i++) {
+    const dessert = cloneTemplate("template.dessert-prototype", ".dessert");
+    dessert.dataset.dessertId = `${i + 1}`;
+
+    dessert.querySelector(".dessert-image").src = dessertsData[i].image.desktop;
+    const sources = dessert.querySelectorAll("picture source");
+    sources[0].srcset = dessertsData[i].image.mobile;
+    sources[1].srcset = dessertsData[i].image.tablet;
+    sources[2].srcset = dessertsData[i].image.desktop;
+
+    setDataToEle(dessert, ".category", dessertsData[i].category);
+    setDataToEle(dessert, ".name", dessertsData[i].name);
+    setDataToEle(dessert, ".price", priceFormatting(dessertsData[i].price));
+
+    dessertsNameMap.set(i + 1, dessertsData[i].name);
+    dessertsPriceMap.set(i + 1, priceFormatting(dessertsData[i].price));
+    dessertsList.append(dessert);
+  }
+}
+
+setDataToDesserts();
+
+function handleDessertChanges(dessertCart) {
+  const dessert = getEleByDessertId(".dessert", dessertCart.dataset.dessertId);
+  const dessertQuantity = dessert.querySelector(".count-btn .quantity");
+  totalItemsEle.textContent = +totalItemsEle.textContent - +dessertQuantity.textContent;
   dessertQuantity.textContent = "1";
   showAddBtn(dessert.dataset.dessertId);
-  updateTotalCost(-removeDollarSign(dessertTotalPrice));
+}
+
+dessertsCartEle.addEventListener("pointerup", (e) => {
+  btn = e.target;
+  if (!btn.closest(".remove-btn")) return;
+  const dessertCart = btn.closest(".dessert-cart");
+
+  handleDessertChanges(dessertCart);
+  updateTotalCost(dessertCart.querySelector(".total-price").textContent, "-");
   dessertCart.remove();
   document.querySelectorAll(".remove-btn").length === 0 ? showEmptyCart() : "";
 });
 
-function lockScroll() {
-  document.body.style.position = "fixed";
-  document.body.style.top = "0";
-  document.body.style.left = "0";
-  document.body.style.right = "0";
-  document.body.style.width = "100%";
-}
-
-function unlockScroll() {
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.left = "";
-  document.body.style.right = "";
-  document.body.style.width = "";
-}
-
-confirmBtn.addEventListener("pointerup", () => {
-  lockScroll();
+function handleConfirmationModal() {
   removeClassFromEles("hidden", overlay, confirmationModal);
-  const cloneOrderInfo = orderInfo.cloneNode(true);
+  setTimeout(() => confirmationModal.classList.add("show-modal-smoothly"), 200);
 
+  if (matchMedia("(max-width: 480px)").matches) {
+    confirmationModal.style.bottom = "-100%";
+    setTimeout(() => confirmationModal.style.removeProperty("bottom"), 100);
+  }
+
+  const cloneOrderInfo = document.querySelector(".your-cart .order-info").cloneNode(true);
   cloneOrderInfo.querySelectorAll(".dessert-cart").forEach((dc) => {
     dc.querySelector(".remove-btn").remove();
-    let thumbnailImg = document.createElement("img");
-    let dessertImg = getEleByDessertId(".dessert", dc.dataset.dessertId).querySelector(".dessert-image");
+    const dessertImg = getEleByDessertId(".dessert", dc.dataset.dessertId).querySelector(".dessert-image");
+    const thumbnailImg = document.createElement("img");
     thumbnailImg.src = dessertImg.src.replace("desktop", "thumbnail");
-    console.log(getEleByDessertId(".dessert", dc.dataset.dessertId));
     dc.prepend(thumbnailImg);
-    dc.append(dc.querySelector(".dessert-total-price"));
+    dc.append(dc.querySelector(".total-price"));
   });
-  newOrderBtn.before(cloneOrderInfo);
+  newOrderBtnEle.before(cloneOrderInfo);
+}
 
-  const addBtnsHidden = document.querySelectorAll(".add-btn.hidden");
-  addBtnsHidden.forEach((addBtn) => {
-    addBtn.nextElementSibling.querySelector(".quantity").textContent = "1";
-    showAddBtn(addBtn.closest(".dessert").dataset.dessertId);
+const confirmBtnEle = document.querySelector(".your-cart button.confirm");
+confirmBtnEle.addEventListener("pointerup", () => {
+  document.body.classList.add("lock-scroll");
+  handleConfirmationModal();
+
+  document.querySelectorAll(".dessert").forEach((ele) => {
+    ele.querySelector(".count-btn .quantity").textContent = "1";
+    showAddBtn(ele.dataset.dessertId);
   });
 
-  totalItems.textContent = "0";
-  allDessertsCart.innerHTML = "";
-  totalCost.textContent = "0";
+  totalItemsEle.textContent = "0";
+  dessertsCartEle.innerHTML = "";
+  totalCostEle.textContent = "0";
   showEmptyCart();
 });
 
-newOrderBtn.addEventListener("pointerup", () => {
-  unlockScroll();
+newOrderBtnEle.addEventListener("pointerup", () => {
+  document.body.classList.remove("lock-scroll");
   confirmationModal.querySelector(".order-info").remove();
+  confirmationModal.classList.remove("show-modal-smoothly");
   addClassToEles("hidden", confirmationModal, overlay);
 });
